@@ -1,0 +1,41 @@
+---
+- name: Download epel-release-latest
+  get_url:
+    url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    dest: /home/sre-quest
+- name: Download remi-release
+  get_url:
+    url: https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+    dest: /home/sre-quest
+
+- name: Install PHP repository
+  dnf: 
+    disable_gpg_check=yes
+    name={{ item }}
+    state=present
+  loop: ['/home/sre-quest/epel-release-latest-8.noarch.rpm','/home/sre-quest/remi-release-8.rpm']
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Reset PHP module
+  command: dnf -y module reset php
+  args:
+    warn: false
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Install PHP module
+  command: dnf -y module install php:remi-7.4
+  args:
+    warn: false
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Install PHP on RedHat Family
+  dnf:
+    name={{ item }}
+    state=latest
+    enablerepo=php:remi-7.4
+  loop: ['php','php-mysqlnd','php-dom','php-simplexml','php-xml','php-curl','php-exif','php-ftp','php-gd','php-iconv','php-json','php-mbstring','php-posix']
+  when:
+    ansible_os_family == "RedHat"

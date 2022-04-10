@@ -1,0 +1,31 @@
+---
+- name: Install tar on RedHat Family
+  dnf:
+    name=tar
+    state=latest
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Download and unpack latest WordPress
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: "/var/www"
+    remote_src: yes
+    creates: "/var/www/worpress"
+
+- name: Add wordpress vhost
+  template:
+    src=templates/wordpress.conf
+    dest=/etc/httpd/conf.d/wordpress.conf
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Set location wordpress owner
+  file:
+    path: "/var/www/wordpress"
+    owner: apache
+
+- name: Add wordpress config
+  template:
+    src=templates/wp-config.php
+    dest=/var/www/wordpress/wp-config.php

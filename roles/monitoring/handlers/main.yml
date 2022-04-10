@@ -1,0 +1,13 @@
+---
+- name: zabbix-agent systemd
+  systemd:
+    name: zabbix-agent
+    enabled: yes
+    state: started
+
+- name: node exporter systemd
+  systemd:
+    name: node_exporter
+    enabled: yes
+    daemon_reload: yes
+    state: started

@@ -1,0 +1,19 @@
+---
+- name: Install MySQL and Python on RedHat Family
+  dnf:
+    name={{ item }}
+    state=latest
+  loop: ['mysql-server','mysql','python3','python3-pip']
+  when:
+    ansible_os_family == "RedHat"
+  notify:
+    - mysql systemd
+    - mysql set the root password
+    - Remove all anonymous user accounts
+    - Remove the MySQL test database
+    - Creates database for WordPress
+    - Create MySQL user for WordPress
+
+- name: Install PyMySql
+  pip:
+    name: pymysql

@@ -1,0 +1,6 @@
+---
+- name: httpd systemd
+  systemd:
+    name: httpd
+    enabled: yes
+    state: started

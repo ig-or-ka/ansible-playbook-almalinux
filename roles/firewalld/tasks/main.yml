@@ -1,0 +1,41 @@
+---
+- name: Install Firewalld on RedHat Family
+  dnf:
+    name=firewalld
+    state=latest
+  when:
+    ansible_os_family == "RedHat"
+  notify:
+    - firewalld systemd
+
+- name: Allow node expotrer port
+  firewalld:
+    port: 9100/tcp
+    permanent: yes
+    state: enabled
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Allow zabbix-agent port
+  firewalld:
+    port: 10050/tcp
+    permanent: yes
+    state: enabled
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Allow SSH port
+  firewalld:
+    port: 22/tcp
+    permanent: yes
+    state: enabled
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Allow http port
+  firewalld:
+    port: 80/tcp
+    permanent: yes
+    state: enabled
+  when:
+    ansible_os_family == "RedHat"

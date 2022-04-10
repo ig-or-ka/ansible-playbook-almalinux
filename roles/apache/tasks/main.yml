@@ -1,0 +1,17 @@
+---
+- name: Install Apache Web Server on RedHat Family
+  dnf:
+    name={{ item }}
+    state=latest
+  loop: ['httpd','httpd-tools']
+  when:
+    ansible_os_family == "RedHat"
+  notify:
+    - httpd systemd
+
+- name: Replace httpd.conf
+  when:
+    ansible_os_family == "RedHat"
+  template:
+    src=templates/httpd.conf
+    dest=/etc/httpd/conf/httpd.conf

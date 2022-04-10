@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become:
+    true
+  become_method:
+    sudo
+  environment:
+    http_proxy: http://10.115.22.1:8080
+    https_proxy: http://10.115.22.1:8080
+  vars:
+    zabbix_server_ip: 10.115.22.101
+    proxy_ip: 10.115.22.1
+    proxy_port: 8080
+    zabbix_hostname: AlmaProd
+    nginx_server_name: sth22.srequest.ru
+    db_user: wp-user
+    db_password: <db_password>
+    db_root_password: <db_root_password>
+    vm_user: sre-quest
+  roles:
+   - ssh
+   - epel
+   - firewalld
+   - nginx
+   - apache
+   - php
+   - mysql
+   - wordpress
+   - monitoring

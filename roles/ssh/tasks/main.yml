@@ -1,0 +1,27 @@
+---
+- name: Disable SELinux
+  selinux: 
+    state=disabled
+
+- name: Add dnf proxy config
+  template:
+    src=templates/dnf.conf
+    dest=/etc/dnf/dnf.conf
+  when:
+    ansible_os_family == "RedHat"
+
+- name: Set authorized key
+  authorized_key:
+    user={{ vm_user }}
+    state=present
+    key="{{ lookup('file', 'templates/id_rsa.pub') }}"
+
+- name: Add ssh config
+  template:
+    src=templates/sshd_config
+    dest=/etc/ssh/sshd_config
+
+- name: Restart service ssh
+  service:
+    name: sshd
+    state: restarted
